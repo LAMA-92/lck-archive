@@ -1,25 +1,23 @@
-name: Deploy React to S3 (Academy)
+name: Build and Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-    # 1. 소스 코드 가져오기
-    - name: Checkout source code
-      uses: actions/checkout@v4
-
-    # 2. Node.js 설치 (React 빌드용)
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20' # 최신 LTS 버전 사용
-        cache: 'npm'       # npm 패키지 설치 속도 향상
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build
 
     # 3. 의존성 패키지 설치
     - name: Install Dependencies
